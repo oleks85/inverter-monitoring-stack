@@ -37,3 +37,15 @@ services:
     image: eclipse-mosquitto:latest
     volumes:
       - mosquito:/mosquitto
+      
+volumes:
+  mosquito:
+    external: true
+  influx_config:
+    external: true
+  influx_data:
+    external: true
+  telegraf_config:
+    external: true
+  grafana:
+    external: true
