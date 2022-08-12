@@ -7,7 +7,7 @@ services:
       - /dev/ttyUSB0:/dev/ttyUSB0
     depends_on:
       - telegraf
-    entrypoint: mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf
+    entrypoint: mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --daemon
   
   grafana:
     image: grafana/grafana:latest
