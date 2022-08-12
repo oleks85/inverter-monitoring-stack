@@ -24,7 +24,7 @@ services:
     depends_on:
       - influxdb
       - mqtt
-    entrypoint: telegraf --config /etc/telegraf/telegraf.conf --config-dir /etc/telegraf/telegraf.d
+    entrypoint: telegraf --config-directory /etc/telegraf/telegraf.d
     
   influxdb:
     image: influxdb:2.3
