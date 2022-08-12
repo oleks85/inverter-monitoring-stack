@@ -8,4 +8,4 @@ RUN set -eux; \
 VOLUME [ "/etc/mpp-solar" ]
 
 #CMD ["python3"]
-ENTRYPOINT ["mpp-solar", "--configfile", "/etc/mpp-solar/mpp-solar.conf"]
+ENTRYPOINT mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf
