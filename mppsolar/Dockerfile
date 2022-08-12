@@ -2,7 +2,7 @@ FROM python:slim
 
 RUN set -eux; \
         apt-get update; \
-        apt-get install -y build-essential libglib2.0-dev; \
+        apt-get install -y build-essential libglib2.0-dev libsystemd-dev; \
         pip install mppsolar; \
         pip install systemd-python;
 
