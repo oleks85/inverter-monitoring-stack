@@ -3,6 +3,10 @@ services:
     build: ./mppsolar/
     volumes:
       - app-solar-config:/etc/mpp-solar
+    tmpfs:
+      - /run
+      - /sys/fs/cgroup
+      - /tmp
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
     depends_on:

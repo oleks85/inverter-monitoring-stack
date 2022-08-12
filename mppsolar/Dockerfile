@@ -3,7 +3,8 @@ FROM python:slim
 RUN set -eux; \
         apt-get update; \
         apt-get install -y build-essential libglib2.0-dev; \
-        pip install mppsolar;
+        pip install mppsolar; \
+        pip install systemd-python;
 
 VOLUME [ "/etc/mpp-solar" ]
 
