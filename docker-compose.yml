@@ -12,7 +12,8 @@ services:
     depends_on:
       - telegraf
     entrypoint: mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --daemon
-  
+    restart: unless-stopped
+
   grafana:
     image: grafana/grafana:latest
     ports:
@@ -21,6 +22,7 @@ services:
       - grafana_data:/var/lib/grafana
     depends_on:
       - influxdb
+    restart: unless-stopped
   
   telegraf:
     image: telegraf:1.23.2
@@ -30,7 +32,8 @@ services:
       - influxdb
       - mqtt
     entrypoint: telegraf --config-directory /etc/telegraf/telegraf.d
-    
+    restart: unless-stopped
+
   influxdb:
     image: influxdb:2.3
     volumes:
@@ -38,12 +41,14 @@ services:
       - influx_data:/var/lib/influxdb2
     ports:
       - 8086:8086
+    restart: unless-stopped
 
   mqtt:
     image: eclipse-mosquitto:latest
     volumes:
       - mosquito:/mosquitto
-
+    restart: unless-stopped
+    
 volumes:
   mosquito:
     external: true
