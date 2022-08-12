@@ -1,6 +1,9 @@
 FROM python:slim
 
-RUN pip install mppsolar
+RUN set -eux; \
+        apt-get update; \
+        apt-get install -y build-essential libglib2.0-dev; \
+        pip install mppsolar;
 
 VOLUME [ "/etc/mpp-solar" ]
 
