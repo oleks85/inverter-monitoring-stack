@@ -13,7 +13,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - grafana:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
     depends_on:
       - influxdb
   
@@ -37,7 +37,7 @@ services:
     image: eclipse-mosquitto:latest
     volumes:
       - mosquito:/mosquitto
-      
+
 volumes:
   mosquito:
     external: true
@@ -47,5 +47,7 @@ volumes:
     external: true
   telegraf_config:
     external: true
-  grafana:
+  grafana_data:
+    external: true
+  app-solar-config:
     external: true
