@@ -48,6 +48,8 @@ services:
     volumes:
       - mosquito:/mosquitto
     restart: unless-stopped
+    ports:
+      - 1883:1883
     
 volumes:
   mosquito:
