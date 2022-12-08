@@ -2,9 +2,12 @@ FROM python:slim
 
 RUN set -eux; \
         apt-get update; \
-        apt-get install -y build-essential libglib2.0-dev libsystemd-dev; \
-        pip install mppsolar; \
-        pip install systemd-python;
+        apt-get install -y git build-essential libglib2.0-dev libsystemd-dev;
+        
+ #       pip install mppsolar; \
+ #       pip install systemd-python;
+
+RUN pip install -e "git+https://github.com/jblance/mpp-solar.git#egg=mppsolar"
 
 VOLUME [ "/etc/mpp-solar" ]
 
