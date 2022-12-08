@@ -7,7 +7,7 @@ RUN set -eux; \
  #       pip install mppsolar; \
  #       
 
-RUN pip install -e "git+https://github.com/jblance/mpp-solar.git#egg=mppsolar"
+RUN pip install -e "git+https://github.com/oleks85/mpp-solar.git#egg=mppsolar"
 
 VOLUME [ "/etc/mpp-solar" ]
 
