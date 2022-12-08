@@ -11,7 +11,7 @@ services:
       - /dev/ttyUSB0:/dev/ttyUSB0
     depends_on:
       - telegraf
-    entrypoint: mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --daemon
+    entrypoint: mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --daemon --info
     restart: unless-stopped
 
   grafana:
