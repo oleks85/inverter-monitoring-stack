@@ -2,10 +2,10 @@ FROM python:slim
 
 RUN set -eux; \
         apt-get update; \
-        apt-get install -y git build-essential libglib2.0-dev libsystemd-dev;
-        
+        apt-get install -y git build-essential libglib2.0-dev libsystemd-dev; \
+        pip install systemd-python;
  #       pip install mppsolar; \
- #       pip install systemd-python;
+ #       
 
 RUN pip install -e "git+https://github.com/jblance/mpp-solar.git#egg=mppsolar"
 
