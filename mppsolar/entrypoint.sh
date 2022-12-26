@@ -6,7 +6,8 @@
 # Start the primary process and put it in the background
 # MOXA_CONNECTION_STRING eq. tcp:192.168.1.22:4001
 socat pty,link=/dev/moxa0,raw $MOXA_CONNECTION_STRING & 
-
+# wait before open connection
+sleep 2
 # Start the helper process
 mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf
 
