@@ -7,11 +7,10 @@ services:
       - /run
       - /sys/fs/cgroup
       - /tmp
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
     depends_on:
       - telegraf
-    entrypoint: mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --daemon --info
+    environment:
+      - MOXA_CONNECTION_STRING=tcp:192.168.0.9:4001
     restart: unless-stopped
 
   grafana:
