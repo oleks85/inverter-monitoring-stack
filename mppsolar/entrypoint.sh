@@ -10,8 +10,9 @@ socat pty,link=/dev/moxa0,raw $MOXA_CONNECTION_STRING &
 
 ps ax  
 # Start the helper process
-mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --debug
-  
+mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --debug &
+
+bash
 # the my_helper_process might need to know how to wait on the
 # primary process to start before it does its work and returns
   
