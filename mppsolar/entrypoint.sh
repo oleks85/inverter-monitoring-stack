@@ -10,7 +10,7 @@ socat -d -d -d -s pty,link=/dev/ttyUSB0,raw,echo=0,ignoreeof TCP-LISTEN:4001,reu
 # wait before open connection
 sleep 1
 # Start the helper process
-mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf
+mpp-solar --configfile /etc/mpp-solar/mpp-solar.conf --daemon
 
 # the my_helper_process might need to know how to wait on the
 # primary process to start before it does its work and returns
