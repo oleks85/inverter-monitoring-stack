@@ -11,6 +11,8 @@ services:
       - telegraf
     environment:
       - MOXA_CONNECTION_STRING=tcp:192.168.0.9:4001
+    ports:
+      - 4001:4001
     restart: unless-stopped
 
   grafana:
