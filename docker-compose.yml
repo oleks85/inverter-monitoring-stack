@@ -29,6 +29,7 @@ services:
     depends_on:
       - influxdb
     restart: unless-stopped
+    user: "0"
   
   telegraf:
     image: telegraf:1.23.2
