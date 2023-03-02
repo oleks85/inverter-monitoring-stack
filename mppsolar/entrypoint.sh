@@ -5,8 +5,8 @@ set -m
 
 # Start the primary process and put it in the background
 # MOXA_CONNECTION_STRING eq. tcp:192.168.1.22:4001
-#socat -d -d -d -d pty,link=/dev/moxa0,raw,echo=0 $MOXA_CONNECTION_STRING & 
-socat -d -d -d -s pty,link=/dev/ttyUSB0,raw,echo=0,ignoreeof TCP-LISTEN:4001,reuseaddr &
+socat -d -d -d -d pty,link=/dev/moxa0,raw,echo=0 $MOXA_CONNECTION_STRING & 
+#socat -d -d -d -s pty,link=/dev/ttyUSB0,raw,echo=0,ignoreeof TCP-LISTEN:4001,reuseaddr &
 # wait before open connection
 sleep 1
 # Start the helper process
