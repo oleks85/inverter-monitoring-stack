@@ -14,7 +14,7 @@ services:
     ports:
       - 4001:4001
     healthcheck:
-      test: "pidof socat || exit 1"
+      test: "pidof socat && pidof python || exit 1"
       interval: 20s
       timeout: 1s
       retries: 1
