@@ -1,0 +1,104 @@
+version: '3.9'
+
+services:
+
+  grafana:
+    image: grafana/grafana:latest
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.grafana.entrypoints=web
+      - traefik.http.routers.grafana.service=grafana
+      - traefik.http.routers.grafana.rule=Host(`grafana.home.arpa`)
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+      - traefik.http.services.grafana.loadbalancer.server.scheme=http
+
+      - traefik.http.routers.grafana.middlewares=grafana-redirect
+      - traefik.http.middlewares.grafana-redirect.redirectscheme.scheme=https
+      
+      - traefik.http.routers.grafana1.entrypoints=websecure
+      - traefik.http.routers.grafana1.rule=Host(`grafana.home.arpa`)
+      - traefik.http.routers.grafana1.tls=true
+      - traefik.http.routers.grafana1.tls.certresolver=myresolver
+      - traefik.http.routers.grafana1.service=grafana
+
+      - traefik.docker.network=traefik-net
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - influxdb
+    networks:
+      - gitm-net
+      - traefik-net
+    restart: unless-stopped
+    user: "0"
+  
+  telegraf:
+    image: telegraf:1.23.2
+    volumes:
+      - telegraf_config:/etc/telegraf
+    depends_on:
+      - influxdb
+      - mqtt
+    entrypoint: telegraf --config-directory /etc/telegraf/telegraf.d
+    networks:
+      - gitm-net
+    restart: unless-stopped
+
+  influxdb:
+    image: influxdb:2.3
+    volumes:
+      - influx_config:/etc/influxdb2
+      - influx_data:/var/lib/influxdb2
+    networks:
+      - gitm-net
+      - traefik-net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.influxdb.entrypoints=web
+      - traefik.http.routers.influxdb.service=influxdb
+      - traefik.http.routers.influxdb.rule=Host(`influx.home.arpa`)
+      - traefik.http.services.influxdb.loadbalancer.server.port=8086
+      - traefik.http.services.influxdb.loadbalancer.server.scheme=http
+
+      - traefik.http.routers.influxdb.middlewares=influxdb-redirect
+      - traefik.http.middlewares.influxdb-redirect.redirectscheme.scheme=https
+      
+      - traefik.http.routers.influxdb1.entrypoints=websecure
+      - traefik.http.routers.influxdb1.rule=Host(`influx.home.arpa`)
+      - traefik.http.routers.influxdb1.tls=true
+      - traefik.http.routers.influxdb1.tls.certresolver=myresolver
+      - traefik.http.routers.influxdb1.service=influxdb
+
+      - traefik.docker.network=traefik-net
+    
+    restart: unless-stopped
+
+  mqtt:
+    image: eclipse-mosquitto:latest
+    volumes:
+      - mosquito:/mosquitto
+    restart: unless-stopped
+    networks:
+      - gitm-net
+    ports:
+      - 1883:1883
+
+volumes:
+  mosquito:
+    external: true
+  influx_config:
+    external: true
+  influx_data:
+    external: true
+  telegraf_config:
+    external: true
+  grafana_data:
+    external: true
+
+networks:
+  traefik-net:
+    external: true
+
+# grafana, influx, telegraf, mosquitto network
+  gitm-net:
+    external: true

@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homeassistant.rule=Host(`homeassistant.home.arpa`)
+      - traefik.http.routers.homeassistant.entrypoints=web
+      - traefik.http.routers.homeassistant.service=homeassistant
+      - traefik.http.services.homeassistant.loadbalancer.server.port=8123
+      - traefik.http.services.homeassistant.loadbalancer.server.scheme=http
+      - traefik.docker.network=traefik-net
+    ports:
+      - 8123:8123
+    volumes:
+      - homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik-net
+      - postgres-net
+      - gitm-net
+    restart: unless-stopped
+   
+volumes:
+  homeassistant:
+    external: true
+    
+networks:
+  traefik-net:
+    external: true
+  postgres-net:
+    external: true
+  gitm-net:
+    external: true

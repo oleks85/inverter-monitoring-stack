@@ -1,0 +1,28 @@
+services:
+  mpp-solar:
+    build: ./mppsolar/
+    volumes:
+      - app-solar-config:/etc/mpp-solar
+    tmpfs:
+      - /run
+      - /sys/fs/cgroup
+      - /tmp
+    environment:
+      - MOXA_CONNECTION_STRING
+    networks:
+      - gitm-net
+    healthcheck:
+      test: "pidof socat && pidof python || exit 1"
+      interval: 20s
+      timeout: 1s
+      retries: 1
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  app-solar-config:
+    external: true
+
+networks:
+  gitm-net:
+    external: true
