@@ -10,7 +10,7 @@ services:
       - traefik.http.routers.grafana.service=grafana
       - traefik.http.routers.grafana.rule=Host(`grafana.home.arpa`)
       - traefik.http.services.grafana.loadbalancer.server.port=3000
-      - traefik.http.services.grafana.loadbalancer.server.scheme=https
+      - traefik.http.services.grafana.loadbalancer.server.scheme=http
 
       - traefik.http.routers.grafana.middlewares=grafana-redirect
       - traefik.http.middlewares.grafana-redirect.redirectscheme.scheme=https
@@ -58,7 +58,7 @@ services:
       - traefik.http.routers.influxdb.service=influxdb
       - traefik.http.routers.influxdb.rule=Host(`influx.home.arpa`)
       - traefik.http.services.influxdb.loadbalancer.server.port=8086
-      - traefik.http.services.influxdb.loadbalancer.server.scheme=https
+      - traefik.http.services.influxdb.loadbalancer.server.scheme=http
 
       - traefik.http.routers.influxdb.middlewares=influxdb-redirect
       - traefik.http.middlewares.influxdb-redirect.redirectscheme.scheme=https
