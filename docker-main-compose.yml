@@ -16,10 +16,13 @@ services:
       - DOCKER_STEPCA_INIT_DNS_NAMES=localhost,ca.home.arpa
       - DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT=true
       - DOCKER_STEPCA_INIT_ACME=true
+    restart: always
 
   reverse-proxy:
     # The official v2 Traefik docker image
     image: traefik:v2.9
+    depends_on:
+      - step-ca
     # Enables the web UI and tells Traefik to listen to docker
     command:
       - "--api.insecure=true"
@@ -74,6 +77,7 @@ services:
       traefik-net:
         aliases:
           - "traefik.home.arpa"
+    restart: always
       
 networks:
   traefik-net:
