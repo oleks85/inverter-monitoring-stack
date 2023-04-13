@@ -1,0 +1,86 @@
+version: '3.9'
+
+services:
+  step-ca:
+    image: smallstep/step-ca
+    networks:
+      traefik-net:
+        aliases:
+          - "ca.home.arpa"
+    ports:
+      - 9000:9000
+    volumes:
+      - step-ca:/home/step
+    environment:
+      - DOCKER_STEPCA_INIT_NAME=Smallstep
+      - DOCKER_STEPCA_INIT_DNS_NAMES=localhost,ca.home.arpa
+      - DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT=true
+      - DOCKER_STEPCA_INIT_ACME=true
+
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.9
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-net"
+      - "--providers.file.filename=/dynamic-conf.yml"
+      - "--providers.file.watch=true"
+      - "--accesslog=false"
+      - "--log=true"
+      - "--log.level=DEBUG"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesResolvers.myresolver.acme.tlsChallenge=true"
+      - "--certificatesResolvers.myresolver.acme.email=admin"
+      - "--certificatesResolvers.myresolver.acme.storage=/etc/acme/acme.json"
+      - "--certificatesresolvers.myresolver.acme.caserver=https://ca.home.arpa:9000/acme/acme/directory"
+      - "--certificatesResolvers.myresolver.acme.httpChallenge=true"
+      - "--certificatesResolvers.myresolver.acme.httpChallenge.entryPoint=web"
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The HTTPS port
+      - "443:443"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - step-ca:/usr/local/share/step-ca
+#      - /var/lib/docker/volumes/step-ca/_data/certs/root_ca.crt:/usr/local/share/ca-certificates/my_root_ca.crt
+      - traefik-acme:/etc/acme
+      - ./traefik/traefik.yml:/dynamic-conf.yml
+    environment:
+      LEGO_CA_CERTIFICATES: "/usr/local/share/step-ca/root_ca.crt"
+      LEGO_CA_SERVER_NAME: "ca.home.arpa"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik0.entrypoints=web"
+      - "traefik.http.routers.traefik0.rule=Host(`traefik.home.arpa`)"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+      - "traefik.http.middlewares.traefik-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.traefik0.middlewares=traefik-redirect"
+
+      - "traefik.http.routers.traefik1.entrypoints=websecure"
+      - "traefik.http.routers.traefik1.rule=Host(`traefik.home.arpa`)"
+      - "traefik.http.routers.traefik1.tls=true"
+      - "traefik.http.routers.traefik1.tls.certresolver=myresolver"
+    networks:
+      traefik-net:
+        aliases:
+          - "traefik.home.arpa"
+      
+networks:
+  traefik-net:
+    external: true
+    
+volumes:
+  traefik-acme:
+    external: true
+  step-ca:
+    external: true
