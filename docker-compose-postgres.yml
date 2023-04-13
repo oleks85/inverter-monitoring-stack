@@ -27,7 +27,7 @@ services:
       - traefik.http.services.adminer.loadbalancer.server.scheme=http
 
       - traefik.http.routers.adminer.middlewares=adminer-redirect
-      - traefik.http.middlewares.portainer-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.adminer-redirect.redirectscheme.scheme=https
       
       - traefik.http.routers.adminer1.entrypoints=websecure
       - traefik.http.routers.adminer1.rule=Host(`adminer.home.arpa`)
