@@ -1,6 +1,7 @@
 services:
   mpp-solar:
     build: ./mppsolar/
+    pull_policy: build
     volumes:
       - app-solar-config:/etc/mpp-solar
     tmpfs:
